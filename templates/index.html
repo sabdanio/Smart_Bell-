@@ -1,0 +1,64 @@
+{% extends 'base.html '%}
+
+{% block style %}
+<link rel="stylesheet" href="/static/css/style.css">
+{% endblock %}
+
+{% block content %}
+    <div>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <h3 class="logo">N.S. Baranova</h3>
+                <div class="nav-wrap">
+                    <ul class="nav-menu">
+                        {%if logged_in %}
+                            <li><a href="/logout" style="text-decoration: none; color:#aeaeae  ;">Выйти</a></li>
+                        {% else %}
+                            <li><a href="/login" style="text-decoration: none; color:#aeaeae  ; ">Войти</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    </div>
+    <div class="circle"></div>
+    <div class="container justify-content-center">
+        <div class="d-flex flex-column align-items-center mt-3">
+            <h2>Расписание звонков</h2>
+        </div>
+        <div class="d-flex flex-column align-items-center mt-3">
+            <div class="shift">
+                <h2>Первая смена</h2>
+                <table>
+                    <tr><th>Урок</th><th>Начало</th><th>Конец</th></tr>
+                    {% for lesson in schedule.shift_1 %}
+                    <tr>
+                        <td>{{ lesson.lesson}}</td>
+                        <td>{{ lesson.start }}</td>
+                        <td>{{ lesson.end }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="shift">
+                <h2>Вторая смена</h2>
+                <table>
+                    <tr><th>Урок</th><th>Начало</th><th>Конец</th></tr>
+                    {% for lesson in schedule.shift_2 %}
+                    <tr>
+                        <td>{{ lesson.lesson}}</td>
+                        <td>{{ lesson.start }}</td>
+                        <td>{{ lesson.end }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-column container align-items-center">
+        <a href="{{url_for('edit_schedule')}}" class="btn btn-primary">Изменить расписание</a>
+    </div>
+
+{% endblock %}

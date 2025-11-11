@@ -1,0 +1,24 @@
+{% extends 'base.html'%}
+
+{% block style %}
+<link rel="stylesheet" href="/static/css/login.css">
+{% endblock %}
+
+{% block content %}
+    {% if error %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    <div class="circle"></div>
+    <div class="card">
+        <form class="form" method="post">
+            <h2>Вход</h2>
+            <input type="text" name="username" placeholder="Name">
+            <input type="password" name="password" placeholder="Password">
+            <button type="submit">Войти</button>
+        </form>
+    </div>
+
+{% endblock %}

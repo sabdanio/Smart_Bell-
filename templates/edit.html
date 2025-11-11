@@ -1,0 +1,78 @@
+{% extends 'base.html'%}
+
+{% block style %}
+<link rel="stylesheet" href="/static/css/style.css">
+{% endblock %}
+
+{% block content %}
+    <div class="container d-flex flex-column align-items-center justify-content-center form"
+        style="min-height: 100vh; gap: 2rem;">
+        <h2 class="text-center mb-4">Редактировать расписание</h2>
+        <form method="POST" action="{{ url_for('save_schedule') }}" style="width: 400px; max-width: 90vw;">
+            <!-- Первая смена -->
+            <div class="shift mb-4" style="width: 100%;">
+                <h3 class="text-center">Первая смена</h3>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Урок</th>
+                            <th>Начало</th>
+                            <th>Конец</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for lesson in schedule['shift_1'] %}
+                        <tr>
+                            <td>{{ lesson.lesson }}
+                                <input type="hidden" name="shift_1_lesson_{{ loop.index0 }}"
+                                    value="{{ lesson.lesson }}">
+
+                            </td>
+                            <td><input type="text" name="shift_1_start_{{ loop.index0 }}" value="{{ lesson.start }}"
+                                    class="form-control text-center"></td>
+                            <td><input type="text" name="shift_1_end_{{ loop.index0 }}" value="{{ lesson.end }}"
+                                    class="form-control text-center"></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Вторая смена -->
+            <div class="shift mb-4" style="width: 100%;">
+                <h3 class="text-center">Вторая смена</h3>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Урок</th>
+                            <th>Начало</th>
+                            <th>Конец</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for lesson in schedule['shift_2'] %}
+                        <tr>
+                            <td>{{ lesson.lesson }}
+                                <input type="hidden" name="shift_2_lesson_{{ loop.index0 }}"
+                                    value="{{ lesson.lesson }}">
+
+                            </td>
+                            <td><input type="text" name="shift_2_start_{{ loop.index0 }}" value="{{ lesson.start }}"
+                                    class="form-control text-center"></td>
+                            <td><input type="text" name="shift_2_end_{{ loop.index0 }}" value="{{ lesson.end }}"
+                                    class="form-control text-center"></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <a href="{{ url_for('index') }}" class="btn btn-secondary">Вернуться</a>
+                <button type="submit" class="btn btn-primary" >Сохранить</button>
+            </div>
+        </form>
+    </div>
+    <div class="circle"></div>
+
+{% endblock %}

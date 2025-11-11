@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block style %}
+<link rel="stylesheet" href="/static/css/login.css">
+{% endblock %}
+
+{% block content %}
+<h1>🎙 Говорите и отправляйте</h1>
+<button id="startBtn">Запись</button>
+<button id="stopBtn" disabled>Отправить</button>
+
+<script>
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    alert("Ваш браузер не поддерживает запись с микрофона.");
+}
+
+
+    let mediaRecorder;
+    let audioChunks = [];
+
+    document.getElementById("startBtn").onclick = async () => {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+        mediaRecorder.start();
+
+        mediaRecorder.ondataavailable = (e) => {
+            audioChunks.push(e.data);
+        };
+
+        mediaRecorder.onstop = () => {
+            const blob = new Blob(audioChunks, { type: "audio/webm" });
+            const formData = new FormData();
+            formData.append("file", blob, "voice.webm");
+
+            fetch("/api/upload", {
+                method: "POST",
+                body: formData
+            })
+            .then(res => {
+                if (res.ok) {
+                    alert("✅ Отправлено!");
+                } else {
+                    alert("❌ Ошибка при отправке.");
+                }
+            });
+        };
+
+        document.getElementById("startBtn").disabled = true;
+        document.getElementById("stopBtn").disabled = false;
+    };
+
+    document.getElementById("stopBtn").onclick = () => {
+        mediaRecorder.stop();
+        document.getElementById("startBtn").disabled = false;
+        document.getElementById("stopBtn").disabled = true;
+    };
+</script>
+
+{% endblock %}
